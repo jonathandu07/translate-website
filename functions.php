@@ -53,3 +53,7 @@ function tpl($template, $variables = array()) {
 
   return $contents;                   // Return the contents
 }
+
+function form(){
+  include_once './security.php';
+}
