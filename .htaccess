@@ -1,0 +1,20 @@
+# Don't show directory listings for URLs which map to a directory.
+Options -Indexes
+
+# Follow symbolic links in this directory.
+Options +FollowSymLinks
+
+# Set the default handler.
+DirectoryIndex index.php index.html index.htm
+
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+  RewriteRule "/\.|^\.(?!well-known/)" - [F]
+
+  # Pass all requests not referring directly to files in the filesystem to
+  # index.php.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.php [L]
+
+</IfModule>
