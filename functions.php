@@ -16,7 +16,7 @@ function t($text) {
   }
   return (isset($lang[$text])) ? $lang[$text] : $text;
 }
-
+// #########################################################################
 function base_path() {
   return rtrim(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']), "/") . "/";
 }
@@ -24,7 +24,7 @@ function base_path() {
 function base_url() {
   return 'https://' . $_SERVER['SERVER_NAME'] . base_path();
 }
-
+// #########################################################################
 function arg($no = null) {
   if (base_path() == '/') {
     $uri = explode("?", substr($_SERVER['REQUEST_URI'], 1));
@@ -40,7 +40,7 @@ function arg($no = null) {
     return (isset($list[$no])) ? $list[$no] : '';
   }
 }
-
+// #########################################################################
 function tpl($template, $variables = array()) {
   $templateFile = __DIR__ . "/tpl/" . $template . '.tpl.php';
 
@@ -57,7 +57,7 @@ function tpl($template, $variables = array()) {
 function form(){
   include_once './security.php';
 }
-
+// #########################################################################
 function c($text) {
   static $lang;
 
@@ -77,15 +77,28 @@ function c($text) {
   return (isset($lang[$text])) ? $lang[$text] : $text;
 }
 
-function fecha(){
-  static $langue;
-  if(!$langue){
-    $langs ="fr";
-    setcookie('lang', $langs);
+function get_language(){
+  static $langs;
+
+  if (!$langs) {
+    $langsPath = 'fr';
+    if (isset($_GET['lang'])) {
+      $langsPath = $_GET['lang'];
+      setcookie('lang', $langsPath);
+      setcookie('user_lang', 'language-trans', time()+3600*24, '/', '', true, true);
+      $_COOKIE['language-trans'] = $langsPath;
+    } else if (isset($_COOKIE['language-trans'])) {
+      $langsPath = $_COOKIE['language-trans'];
+    }
   }
-  setcookie('lang', 'fr');
-  setlocale(LC_ALL, $_COOKIE['lang']);
-  setlocale(LC_ALL, $_GET['lang']);
+
+  return $langsPath;
+}
+// #########################################################################
+function fecha(){
+  setcookie('lang', get_language());
+  setcookie('user_lang', get_language(), time()+3600*24, '/', '', true, true);
+  setlocale(LC_ALL, $_COOKIE['user_lang']);
   $jour = strftime("%A");
   $fecha = strftime("%e");
   $mois = strftime("%B");
