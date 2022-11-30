@@ -1,6 +1,7 @@
 <?php
 
-function t($text) {
+function t($text)
+{
   static $lang;
 
   if (!$lang) {
@@ -17,15 +18,18 @@ function t($text) {
   return (isset($lang[$text])) ? $lang[$text] : $text;
 }
 // #########################################################################
-function base_path() {
+function base_path()
+{
   return rtrim(str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']), "/") . "/";
 }
 
-function base_url() {
+function base_url()
+{
   return 'https://' . $_SERVER['SERVER_NAME'] . base_path();
 }
 // #########################################################################
-function arg($no = null) {
+function arg($no = null)
+{
   if (base_path() == '/') {
     $uri = explode("?", substr($_SERVER['REQUEST_URI'], 1));
   } else {
@@ -41,7 +45,8 @@ function arg($no = null) {
   }
 }
 // #########################################################################
-function tpl($template, $variables = array()) {
+function tpl($template, $variables = array())
+{
   $templateFile = __DIR__ . "/tpl/" . $template . '.tpl.php';
 
   extract($variables, EXTR_SKIP);   // Extract the variables to a local namespace
@@ -53,58 +58,70 @@ function tpl($template, $variables = array()) {
 
   return $contents;                   // Return the contents
 }
-
-function form(){
+// #########################################################################
+function form()
+{
   include_once './security.php';
 }
-// #########################################################################
-function c($text) {
-  static $lang;
+//#########################################################################
+function contact_tpl($tpl, $var = array())
+{
+  $tplFile = __DIR__ . "/tpl/" . $tpl . '.tpl.php';
 
-  if (!$lang) {
-    $langPath = 'fr';
-    if (isset($_GET['lang'])) {
-      $langPath = $_GET['lang'];
-      setcookie('lang', $langPath);
-      setcookie('user_lang', 'language-trans', time()+3600*24, '/', '', true, true);
-      $_COOKIE['language-trans'] = $langPath;
-    } else if (isset($_COOKIE['language-trans'])) {
-      $langPath = $_COOKIE['language-trans'];
-    }
+  extract($var, EXTR_SKIP);
+  ob_start();
+  include "$tplFile";
+  $content = ob_get_contents();
+  ob_end_clean();
 
-    $lang = parse_ini_file(__DIR__ . "/languages/" . $langPath . ".ini");
-  }
-  return (isset($lang[$text])) ? $lang[$text] : $text;
+  return $content;
 }
-
-function get_language(){
+// #########################################################################
+function get_langue()
+{
   static $langs;
 
   if (!$langs) {
     $langsPath = 'fr';
     if (isset($_GET['lang'])) {
       $langsPath = $_GET['lang'];
-      setcookie('lang', $langsPath);
-      setcookie('user_lang', 'language-trans', time()+3600*24, '/', '', true, true);
-      $_COOKIE['language-trans'] = $langsPath;
-    } else if (isset($_COOKIE['language-trans'])) {
-      $langsPath = $_COOKIE['language-trans'];
+      $_SESSION['language-trans'] = $langsPath;
+    } else if (isset($_SESSION['language-trans'])) {
+      $langsPath = $_SESSION['language-trans'];
     }
   }
-
   return $langsPath;
 }
 // #########################################################################
-function fecha(){
-  setcookie('lang', get_language());
-  setcookie('user_lang', get_language(), time()+3600*24, '/', '', true, true);
-  setlocale(LC_ALL, $_COOKIE['user_lang']);
+function c($text)
+{
+  static $lang;
+
+  if (!$lang) {
+    $langPath = 'fr';
+    if (isset($_GET['lang'])) {
+      $langPath = get_langue();
+      setcookie('lang', $langPath);
+    } else if (isset($_COOKIE['lang'])) {
+      $langPath = $_COOKIE['lang'];
+    }
+
+    $lang = parse_ini_file(__DIR__ . "/languages/" . $langPath . ".ini");
+  }
+  return (isset($lang[$text])) ? $lang[$text] : $text;
+}
+// #########################################################################
+function fecha()
+{
+  // $t = array('fr' => 'fr_FR', 'en' => 'en_GB');
+
+  // $local = $t[get_langue()];
+  setlocale(LC_ALL, get_langue());
   $jour = strftime("%A");
   $fecha = strftime("%e");
   $mois = strftime("%B");
   $annee = strftime("%Y");
-  $fechaDhoy = $jour.' '.$fecha.' '.$mois.' '.$annee;
+  $fechaDhoy = $jour . ' ' . $fecha . ' ' . $mois . ' ' . $annee;
 
   return $fechaDhoy;
 }
-?>
