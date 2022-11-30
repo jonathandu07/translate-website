@@ -76,7 +76,16 @@ function c($text) {
   }
   return (isset($lang[$text])) ? $lang[$text] : $text;
 }
+
 function fecha(){
+  static $langue;
+  if(!$langue){
+    $langs ="fr";
+    setcookie('lang', $langs);
+  }
+  setcookie('lang', 'fr');
+  setlocale(LC_ALL, $_COOKIE['lang']);
+  setlocale(LC_ALL, $_GET['lang']);
   $jour = strftime("%A");
   $fecha = strftime("%e");
   $mois = strftime("%B");
@@ -85,5 +94,4 @@ function fecha(){
 
   return $fechaDhoy;
 }
-
 ?>
