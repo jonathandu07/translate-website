@@ -33,32 +33,34 @@ class controller
 
   private function home()
   {
-    $html = '<h1>' . t("Accueil") . '</h1>';
-    $html .= '<p>' . t('accinfo') . '</p>';
+    $date = date('l, jS F Y');
+    $html = '<h1>' . c("Accueil") . '</h1>';
+    $html .= '<p>' . c('accinfo') . '</p>';
     $html .= "<img src='https://cdn-icons-png.flaticon.com/512/5683/5683688.png' alt='helloworld'>"."</img>";
+    $html .= "<h2>".fecha()."</h2>";
     return $html;
   }
 
   private function contact()
   {
-    $html = '<h1>' . t("Contact") . '</h1>';
-    $html .= '<p>' . t('contactinfo') . '</p>';
+    $html = '<h1>' . c("Contact") . '</h1>';
+    $html .= '<p>' . c('contactinfo') . '</p>';
     $html .= "<img src='https://cdn-icons-png.flaticon.com/512/3815/3815596.png' alt='form'>"."</img>";
     return $html;
   }
 
   private function mentions()
   {
-    $html = '<h1>' . t("Mentions") . '</h1>';
-    $html .= '<p>' . t('Mentions-infos') . '</p>';
+    $html = '<h1>' . c("Mentions") . '</h1>';
+    $html .= '<p>' . c('Mentions-infos') . '</p>';
     $html .= "<img src='https://cdn-icons-png.flaticon.com/512/9033/9033089.png' alt='mentions légale'>"."</img>";
     return $html;
   }
   private function security()
   {
-    $html = '<h1>' . t("Verification") . '</h1>';
-    $html .= '<p>' . t('securite-info') . '</p>';
-    $html .= "<article>".form()."</article>";
+    $html = '<h1>' . c("Verification") . '</h1>';
+    $html .= '<p>' . c('securite-info') . '</p>';
+    $html .= "<article class='form'>".form()."</article>";
     return $html;
   }
 }

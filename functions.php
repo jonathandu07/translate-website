@@ -57,3 +57,33 @@ function tpl($template, $variables = array()) {
 function form(){
   include_once './security.php';
 }
+
+function c($text) {
+  static $lang;
+
+  if (!$lang) {
+    $langPath = 'fr';
+    if (isset($_GET['lang'])) {
+      $langPath = $_GET['lang'];
+      setcookie('lang', $langPath);
+      setcookie('user_lang', 'language-trans', time()+3600*24, '/', '', true, true);
+      $_COOKIE['language-trans'] = $langPath;
+    } else if (isset($_COOKIE['language-trans'])) {
+      $langPath = $_COOKIE['language-trans'];
+    }
+
+    $lang = parse_ini_file(__DIR__ . "/languages/" . $langPath . ".ini");
+  }
+  return (isset($lang[$text])) ? $lang[$text] : $text;
+}
+function fecha(){
+  $jour = strftime("%A");
+  $fecha = strftime("%e");
+  $mois = strftime("%B");
+  $annee = strftime("%Y");
+  $fechaDhoy = $jour.' '.$fecha.' '.$mois.' '.$annee;
+
+  return $fechaDhoy;
+}
+
+?>

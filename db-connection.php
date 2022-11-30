@@ -1,14 +1,30 @@
 <?php
+// (A) DATABASE CONFIG - CHANGE TO YOUR OWN!
+define("DB_HOST", "localhost");
+define("DB_NAME", "passwords");
+define("DB_CHARSET", "utf8");
+define("DB_USER", "root");
+define("DB_PASSWORD", "jonathandu07");
 
-$dsn="mysql:host=localhost;dbname=passwords";
-$user="root";
-$passwords="jonathandu07";
+// (B) CONNECT TO DATABASE
+try {
+    $pdo = new PDO(
+        "mysql:host=" . DB_HOST . ";charset=" . DB_CHARSET . ";dbname=" . DB_NAME,
+        DB_USER,
+        DB_PASSWORD,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ]
+    );
+} catch (Exception $ex) {
+    exit($ex->getMessage());
+}
 
-//connection à la base de donnée
-
-try{
-    $pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::MYSQL_ATTR_INIT_COMMAND=> 'SET NAMES utf8']);
-    echo "Connection réussie";
-    }catch(PDOException $e) {
-        echo "Error: ".$e->getMessage();
-    } 
+// (C) SEARCH
+$stmt = $pdo->prepare("SELECT * FROM `passwords_list` WHERE `passwords` LIKE ? OR `sha512_password` LIKE ?");
+$stmt->execute(["%" . $_POST["search"] . "%", "%" . $_POST["search"] . "%"]);
+$results = $stmt->fetchAll();
+if (isset($_POST["ajax"])) {
+    echo json_encode($results);
+}
