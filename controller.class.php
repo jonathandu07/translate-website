@@ -31,16 +31,6 @@ class controller
     echo tpl("wrapper", array("content" => $content));
   }
 
-  public function contacto()
-{
-  switch (arg(0)) {
-    default:
-      $contenu = $this->contactoNos();
-      break;
-  }
-  echo contact_tpl("contact", array("content" => $contenu));
-}
-
   private function home()
   {
     $html = '<h1>' . c("Accueil") . '</h1>';
@@ -52,11 +42,11 @@ class controller
 
   private function contact()
   {
-    $html = '<h1>' . c("Contact") . '</h1>';
-    $html .= '<p>' . c('contactinfo') . '</p>';
-    $html .= "<img src='https://cdn-icons-png.flaticon.com/512/3815/3815596.png' alt='form'>"."</img>";
-    $html .= "<a href='/tpl/contact.tpl.php'>"."Nous contacter"."</a>";
-    return $html;
+    $contenu = '<h1>' . c("Contact") . '</h1>';
+    $contenu .= '<p>' . c('contactinfo') . '</p>';
+    $contenu .= "<img src='https://cdn-icons-png.flaticon.com/512/3815/3815596.png' alt='form'>"."</img>";
+    $contenu .= "<a href='/tpl/contact.tpl.php'>"."Nous contacter"."</a>";
+    return tpl('contact', array('contenu' => $contenu));
   }
   private function contactoNos()
   {
