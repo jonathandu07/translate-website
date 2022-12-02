@@ -125,3 +125,11 @@ function fecha()
 
   return $fechaDhoy;
 }
+
+function get_ini()
+{
+  $idioma = get_langue();
+  $ini = parse_ini_file(__DIR__ . "/languages/" . $idioma . ".ini");
+  return $ini;
+}
+

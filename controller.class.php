@@ -21,53 +21,50 @@ class controller
       case "mentions-legales":
         $content = $this->mentions();
         break;
-        case "security":
-          $content = $this->security();
-          break;
+      case "security":
+        $content = $this->security();
+        break;
+      case "ws":
+        $this->ws();
+        $content = $this->ws();
+        break;
       default:
         $content = $this->home();
         break;
     }
     echo tpl("wrapper", array("content" => $content));
   }
-
   private function home()
   {
-    $html = '<h1>' . c("Accueil") . '</h1>';
-    $html .= '<p>' . c('accinfo') . '</p>';
-    $html .= "<img src='https://cdn-icons-png.flaticon.com/512/5683/5683688.png' alt='helloworld'>"."</img>";
-    $html .= "<h2>".fecha()."</h2>";
-    return $html;
+    return tpl('home', array());
   }
 
   private function contact()
   {
-    $contenu = '<h1>' . c("Contact") . '</h1>';
-    $contenu .= '<p>' . c('contactinfo') . '</p>';
-    $contenu .= "<img src='https://cdn-icons-png.flaticon.com/512/3815/3815596.png' alt='form'>"."</img>";
-    $contenu .= "<a href='/tpl/contact.tpl.php'>"."Nous contacter"."</a>";
-    return tpl('contact', array('contenu' => $contenu));
+    return tpl('contact', array());
   }
-  private function contactoNos()
+
+  private function ws()
   {
-    $html = '<h1>' . c("Contact") . '</h1>';
-    $html .= '<p>' . c('contactinfo') . '</p>';
-    $html .= "<img src='https://cdn-icons-png.flaticon.com/512/3815/3815596.png' alt='form'>"."</img>";
-    return $html;
+    header('Content-Type: application/json');
+
+    $action = $_GET['action'];
+    $key = $_GET['key'];
+    $translate = $_GET['translate'];
+    $ini= get_ini();
+    // var_dump($active);
+
+    echo json_encode($ini);
   }
 
   private function mentions()
   {
-    $html = '<h1>' . c("Mentions") . '</h1>';
-    $html .= '<p>' . c('Mentions-infos') . '</p>';
-    $html .= "<img src='https://cdn-icons-png.flaticon.com/512/9033/9033089.png' alt='mentions légale'>"."</img>";
-    return $html;
+    return tpl('mentions', array());
   }
+
   private function security()
   {
-    $html = '<h1>' . c("Verification") . '</h1>';
-    $html .= '<p>' . c('securite-info') . '</p>';
-    $html .= "<article class='form'>".form()."</article>";
-    return $html;
+
+    return tpl('security', array());
   }
 }

@@ -1,0 +1,7 @@
+{
+    "success": true,
+    "message": "Tout est bon",
+    "results": {
+        "vols": ["Paris-Toulouse", "Lyon-Paris"]
+    }
+}

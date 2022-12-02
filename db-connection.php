@@ -22,9 +22,15 @@ try {
 }
 
 // (C) SEARCH
-$stmt = $pdo->prepare("SELECT * FROM `passwords_list` WHERE `passwords` LIKE ? OR `sha512_password` LIKE ?");
-$stmt->execute(["%" . $_POST["search"] . "%", "%" . $_POST["search"] . "%"]);
-$results = $stmt->fetchAll();
-if (isset($_POST["ajax"])) {
-    echo json_encode($results);
+// $stmt = $pdo->prepare("SELECT * FROM `passwords_list` WHERE `passwords` LIKE ? OR `sha512_password` LIKE ?");
+// $stmt->execute(["%" . $_POST["search"] . "%", "%" . $_POST["search"] . "%"]);
+// $results = $stmt->fetchAll();
+// if (isset($_POST["ajax"])) {
+//     echo json_encode($results);
+// }
+
+$check_password = $pdo->query("SELECT= * FROM passwords_list WHERE passwords LIKE ? ");
+$check_password -> execute(["%" . $_POST["search"] . "%"]);
+if ($check_password) {
+    echo "Mot de passe non sécurisé";
 }
